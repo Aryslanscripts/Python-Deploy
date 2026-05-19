@@ -26,12 +26,12 @@ def video():
 
     try:
         ydl_opts = {
-            "quiet": True,
-            "noplaylist": True,
-            "format": "best[ext=mp4]/best",
-            "skip_download": True,
-            "cookiefile": COOKIE_FILE
-        }
+    "quiet": True,
+    "noplaylist": True,
+    "format": "bv*[ext=mp4]+ba/best",
+    "merge_output_format": "mp4",
+    "cookiefile": COOKIE_FILE
+}
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
