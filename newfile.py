@@ -3,42 +3,52 @@ import yt_dlp
 
 app = Flask(__name__)
 
+COOKIE_FILE = "cookies.txt"
+
+
+@app.route("/")
+def home():
+    return jsonify({
+        "status": "ok",
+        "msg": "yt-dlp API running 🚀"
+    })
+
+
 @app.route("/video")
 def video():
-
     url = request.args.get("url", "").strip()
 
     if not url:
         return jsonify({
             "status": "error",
             "msg": "empty url"
-        })
+        }), 400
 
     try:
-
         ydl_opts = {
             "quiet": True,
-            "format": "best"
+            "noplaylist": True,
+            "format": "best",
+            "skip_download": True,
+            "cookiefile": COOKIE_FILE
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-
             info = ydl.extract_info(url, download=False)
-
-            direct_url = info["url"]
 
             return jsonify({
                 "status": "ok",
-                "download": direct_url,
-                "title": info.get("title", "video")
+                "title": info.get("title"),
+                "download": info.get("url"),
+                "duration": info.get("duration")
             })
 
     except Exception as e:
-
         return jsonify({
             "status": "error",
             "msg": str(e)
-        })
+        }), 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
