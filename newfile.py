@@ -28,7 +28,7 @@ def video():
         ydl_opts = {
             "quiet": True,
             "noplaylist": True,
-            "format": "best",
+            "format": "best[ext=mp4]/best",
             "skip_download": True,
             "cookiefile": COOKIE_FILE
         }
